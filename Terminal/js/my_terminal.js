@@ -21,7 +21,6 @@ $('body').terminal({
 		var month = dt.getMonth()+1;
 		var day = dt.getDate();
 
-		// var curr_date = dt.getFullYear()+'/'+(month<10 ? '0' : '')+month+'/'+(day<10 ? '0' : '') + day;
 		var curr_time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 		this.echo(curr_time);
 	}
@@ -39,7 +38,7 @@ $('body').terminal({
 	},
 	exit:function(){
 		if (confirm('This action will close the current tab'+'\nAre you sure you want to precced')) {
- 			// true (paypal.me/andrewdhyder)
+ 			
  			window.close();
 		} else {
  			 // false
