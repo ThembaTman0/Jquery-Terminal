@@ -1,6 +1,7 @@
 ### Hi there 👋
-🔭 I’m currently working on a terminal that works on any browser using the  jQuery Terminal JS library https://terminal.jcubic.pl/ .
+
 <!--
+🔭 I’m currently working on a terminal that works on any browser using the  jQuery Terminal JS library https://terminal.jcubic.pl/ .
 **ThembaTman0/ThembaTman0** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
 Here are some ideas to get you started:
