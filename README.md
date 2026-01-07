@@ -280,9 +280,6 @@ For questions, suggestions, or feedback:
 - Open an issue on GitHub
 - Visit: [github.com/ThembaTman0](https://github.com/ThembaTman0)
 
-## 🌐 Demo
-
-Visit the live demo: [Your Demo Link Here]
 
 ---
 
