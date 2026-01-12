@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Themba Ngobeni | Interactive Dev Terminal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="stylesheet" href="https://unpkg.com/jquery.terminal/css/jquery.terminal.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Subtle animated orbs in background */
+        body::before,
+        body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        body::before {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #58a6ff 0%, transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        body::after {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #3fb950 0%, transparent 70%);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        .app {
+            width: 92%;
+            height: 92%;
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.6);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-bar {
+            height: 42px;
+            background: linear-gradient(180deg, rgba(22, 27, 34, 0.95), rgba(13, 17, 23, 0.9));
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+            user-select: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+            margin-right: 14px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        .title {
+            font-size: 13px;
+            color: #9da7b1;
+            font-weight: 500;
+        }
+
+        #terminal {
+            flex: 1;
+            padding: 14px;
+            outline: none;
+            overflow-y: auto;
+        }
+
+        /* Warp-style: Commands in blocks, responses on background */
+        .terminal-output > div {
+            margin-bottom: 20px;
+        }
+
+        /* Style ONLY the command prompt line (has .cmd class) */
+        .terminal-output > div > .cmd {
+            background: #161b22 !important;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            border: 1px solid #30363d;
+            animation: slideIn 0.2s ease-out;
+            display: block;
+        }
+
+        /* All response lines stay on plain background with tight spacing */
+        .terminal-output > div > div:not(.cmd) {
+            background: transparent !important;
+            border: none !important;
+            padding: 0 4px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Remove extra spacing from terminal output divs */
+        .terminal-output div div {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Terminal output spacing */
+        .terminal .terminal-output {
+            padding-bottom: 10px;
+        }
+
+        .terminal .terminal-output > div:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Terminal styling */
+        .terminal {
+            --background: transparent;
+            --color: #e6edf3;
+            --link-color: #58a6ff;
+            --size: 1;
+        }
+
+        .terminal .terminal-output div div {
+            line-height: 1.5;
+        }
+
+        .terminal .terminal-output {
+            padding-bottom: 10px;
+        }
+
+        /* Command prompt styling */
+        .cmd {
+            color: #58a6ff !important;
+            font-weight: 500;
+        }
+
+        /* Custom colors for output */
+        .highlight {
+            color: #79c0ff;
+            font-weight: 500;
+        }
+
+        .label {
+            color: #8b949e;
+            font-weight: 500;
+        }
+
+        .success {
+            color: #3fb950;
+        }
+
+        .error-text {
+            color: #f85149;
+        }
+
+        .accent {
+            color: #d2a8ff;
+        }
+
+        /* Scrollbar styling */
+        #terminal::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #terminal::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+
+        #terminal::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 5px;
+        }
+
+        #terminal::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
+        }
+
+        /* Links */
+        .terminal a {
+            color: #58a6ff !important;
+            text-decoration: none;
+        }
+
+        .terminal a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app">
+    <div class="title-bar">
+        <div class="window-controls">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+        </div>
+        <div class="title">themba@java-dev — Interactive Portfolio Terminal</div>
+    </div>
+
+    <div id="terminal"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/jquery.terminal/js/jquery.terminal.min.js"></script>
+
+<script src="js/portfolio.js"></script>
+<script src="js/commands.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>
