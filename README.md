@@ -1,8 +1,10 @@
+# jQuery Terminal Emulator
+
 <p align="center">
    <img width="673" height="415" alt="image" src="https://github.com/user-attachments/assets/815458ed-a619-44c9-8e3c-45446bbe3d77" />
 </p>
 
-# jQuery Terminal Emulator
+
 
 A web-based terminal emulator built with jQuery that brings the command-line interface experience to your browser. This interactive terminal allows users to execute commands, interact with a shell-like environment, and provides a retro computing experience with modern web technologies.
 
